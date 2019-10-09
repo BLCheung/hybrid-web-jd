@@ -1,7 +1,7 @@
 // 定义最大fontSize
 const MAX_FONT_SIZE = 42;
 
-// 给文档注册事件监听，监听html文档解析完成时事件
+// 给文档注册事件监听，监听html文档解析完成时事件DOMContentLoaded
 document.addEventListener('DOMContentLoaded', () => {
   // 获取html标签
   const html = document.querySelector('html');
