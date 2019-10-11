@@ -3,13 +3,13 @@
     <!-- 动态组件，用法类似小程序的template -->
     <component :is="currentComponent"></component>
     <!-- 底部tab栏 -->
-    <toolBar @onChange="onChangeFragment"></toolBar>
+    <tool-bar @onChange="onChangeFragment" />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import Toolbar from '@cpm/Toolbar.vue';
+import Toolbar from '@cpm/currency/Toolbar.vue';
 export default {
   components: {
     toolBar: Toolbar,
