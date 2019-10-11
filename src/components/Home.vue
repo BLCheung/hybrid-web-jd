@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <div class="home-swiper">
-      <swiper :height="swiperHeight" :datas="swiperImgs"></swiper>
+      <swiper :height="swiperHeight" :datas="swiperData.map(item => {return item.icon})" />
     </div>
   </div>
 </template>
@@ -18,17 +18,25 @@ export default {
       // 轮播高度
       swiperHeight: '184px',
       // 轮播图片数据源
-      swiperImgs: [
-        require('@img/swiper-1.jpg'),
-        require('@img/swiper-2.jpg'),
-        require('@img/swiper-3.jpg'),
-        require('@img/swiper-4.jpg'),
-        require('@img/swiper-5.jpg'),
-        require('@img/swiper-6.jpg'),
-        require('@img/swiper-7.jpg'),
-        require('@img/swiper-8.jpg')
-      ]
+      swiperData: []
     };
+  },
+  created() {
+    this.getHomeSwiper();
+  },
+  methods: {
+    getHomeSwiper() {
+      this.$http
+        .get('/swiper')
+        .then(data => {
+          console.log('首页轮播res:', data);
+          this.swiperData = data.list;
+          console.log(this.swiperData);
+        })
+        .catch(err => {
+          console.log('首页轮播err:', err);
+        });
+    }
   }
 };
 </script>
