@@ -42,7 +42,14 @@ export default {
 #main {
   display: flex;
   flex-direction: column;
+  position: relative;
   width: 100%;
   height: 100%;
+
+  tool-bar {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+  }
 }
 </style>

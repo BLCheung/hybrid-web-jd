@@ -17,9 +17,16 @@ module.exports = {
     // 函数前是否加空格警告
     'space-before-function-paren': ['warn', 'never'],
     // 代码含有未使用的变量警告
-    'no-unused-vars': ['warn'],
+    "no-unused-vars": [0, {
+      // 允许声明未使用变量
+      "vars": "local",
+      // 参数不检查
+      "args": "none"
+    }],
+    // 代码含有已导入但未使用的组件
+    'no-unused-components': ['off'],
     // 行尾存在空格警告
-    'no-trailing-spaces': ['warn']
+    'no-trailing-spaces': ['off']
   },
   parserOptions: {
     parser: 'babel-eslint'

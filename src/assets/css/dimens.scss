@@ -1,9 +1,12 @@
 // 定义初始根元素fontSize大小，根据iPhone6,6s,7,8设备宽度设置
 $rootFontSize: 375 / 10;
-// app普通字体主要大小
-$infoFontSize: 14;
 
 // 定义px -> rem转换函数
 @function px2rem($px) {
     @return $px / $rootFontSize + rem;
 }
+
+// app普通字体主要大小
+$infoFontSize: px2rem(14);
+// app小型字体大小
+$miniFontSize: px2rem(12);

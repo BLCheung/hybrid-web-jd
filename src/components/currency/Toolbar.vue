@@ -93,8 +93,8 @@ export default {
     }
 
     &-name {
-      font-size: px2rem($infoFontSize);
-      line-height: px2rem($infoFontSize);
+      font-size: $infoFontSize;
+      line-height: $infoFontSize;
       margin-top: px2rem(4);
 
       &-selected {
