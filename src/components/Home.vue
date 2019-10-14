@@ -1,15 +1,20 @@
 <template>
   <div class="home">
     <div class="home-content">
+      <!-- 轮播图 -->
       <div class="home-swiper">
         <swiper :height="swiperHeight" :datas="swiperData.map(item => {return item.icon})" />
       </div>
+      <!-- 520活动宣传 -->
       <activity>
         <div class="activity-wrapper">
           <img v-for="(item, index) of activityData" :key="index" :src="item.icon" alt />
         </div>
       </activity>
-      <category></category>
+      <!-- 活动分类入口 -->
+      <category />
+      <!-- 秒杀 -->
+      <flash-sale :datas="secondData" />
     </div>
   </div>
 </template>
@@ -18,12 +23,14 @@
 import swiper from '@cpm/currency/Swiper.vue';
 import activity from '@cpm/currency/Activity.vue';
 import category from '@cpm/currency/Category.vue';
+import flashSale from '@cpm/seconds/FlashSale.vue';
 
 export default {
   components: {
     swiper,
     activity,
-    category
+    category,
+    flashSale
   },
   data() {
     return {
@@ -32,7 +39,9 @@ export default {
       // 轮播图片数据源
       swiperData: [],
       // 520活动宣传图图片
-      activityData: []
+      activityData: [],
+      // 秒杀数据源
+      secondData: []
     };
   },
   created() {
@@ -46,13 +55,16 @@ export default {
       this.$http
         .all([
           this.$http.get('/swiper'),
-          this.$http.get('/activitys')
+          this.$http.get('/activitys'),
+          this.$http.get('/seconds')
         ])
-        .then(this.$http.spread((swiperData, activityData) => {
+        .then(this.$http.spread((swiperData, activityData, secondData) => {
           console.log('首页轮播data:', swiperData);
           this.swiperData = swiperData.list;
           console.log('首页520活动data:', activityData);
           this.activityData = activityData.list;
+          console.log('首页秒杀data:', secondData);
+          this.secondData = secondData.list;
         }));
     }
   }

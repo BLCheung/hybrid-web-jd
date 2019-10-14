@@ -77,6 +77,7 @@ export default {
   flex-wrap: wrap;
   align-items: center;
   background-color: white;
+  padding-bottom: px2rem(6);
 
   &-item {
     display: flex;
