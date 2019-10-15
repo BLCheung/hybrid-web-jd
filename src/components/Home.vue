@@ -2,12 +2,12 @@
   <div class="home">
     <div class="home-content">
       <!-- 轮播图 -->
-      <div class="home-swiper">
+      <div class="home-content-swiper">
         <swiper :height="swiperHeight" :datas="swiperData.map(item => {return item.icon})" />
       </div>
-      <!-- 520活动宣传 -->
+      <!-- 520活动 -->
       <activity>
-        <div class="activity-wrapper">
+        <div class="activity-520">
           <img v-for="(item, index) of activityData" :key="index" :src="item.icon" alt />
         </div>
       </activity>
@@ -15,6 +15,13 @@
       <category />
       <!-- 秒杀 -->
       <flash-sale :datas="secondData" />
+      <!-- 拼购街活动 -->
+      <activity>
+        <div class="activity-pinGouStreet">
+          <img src="@img/pinGouJie.gif" alt />
+        </div>
+      </activity>
+      <good-list />
     </div>
   </div>
 </template>
@@ -24,13 +31,15 @@ import swiper from '@cpm/currency/Swiper.vue';
 import activity from '@cpm/currency/Activity.vue';
 import category from '@cpm/currency/Category.vue';
 import flashSale from '@cpm/seconds/FlashSale.vue';
+import goodList from '@cpm/goods/GoodList.vue';
 
 export default {
   components: {
     swiper,
     activity,
     category,
-    flashSale
+    flashSale,
+    goodList
   },
   data() {
     return {
@@ -58,7 +67,7 @@ export default {
           this.$http.get('/activitys'),
           this.$http.get('/seconds')
         ])
-        .then(this.$http.spread((swiperData, activityData, secondData) => {
+        .then(this.$http.spread((swiperData, activityData, secondData, goodListData) => {
           console.log('首页轮播data:', swiperData);
           this.swiperData = swiperData.list;
           console.log('首页520活动data:', activityData);
@@ -78,12 +87,18 @@ export default {
   flex-direction: column;
   width: 100%;
   height: 100%;
-  // font-size: 32px;
+  overflow: hidden;
+  overflow-y: auto;
 
   &-content {
     height: 100%;
 
-    .activity-wrapper {
+    &-swiper {
+      width: 100%;
+      
+    }
+
+    .activity-520 {
       margin-top: px2rem(-8);
       border-top-left-radius: px2rem(8);
       border-top-right-radius: px2rem(8);
@@ -91,6 +106,14 @@ export default {
       img {
         display: inline-block;
         width: 33.33%;
+      }
+    }
+
+    .activity-pinGouStreet {
+      background-color: white;
+
+      img {
+        width: 100%;
       }
     }
   }

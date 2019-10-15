@@ -77,4 +77,8 @@ export default {
     background-color: #ffffff;
   }
 }
+
+.swiper-slide-img {
+  width: 100%;
+}
 </style>

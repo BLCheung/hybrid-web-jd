@@ -1,3 +1,13 @@
 @import './dimens';
 @import './reset';
 @import './colors';
+
+// 文本最多两行展示
+.text-line-2 {
+    display: -webkit-box;
+    text-overflow: clip;
+    word-break: break-all;
+    white-space: normal;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+}

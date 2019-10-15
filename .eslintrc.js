@@ -23,6 +23,8 @@ module.exports = {
       // 参数不检查
       "args": "none"
     }],
+    'no-tabs': ['off'],
+    'indent': ['off'],
     'no-useless-return': ['off', 'never'],
     // 代码含有已导入但未使用的组件
     'no-unused-components': ['off'],
