@@ -21,7 +21,7 @@
       class="goods-item"
       :class="layoutItemClass"
       :style="itemStyles[index]"
-      v-for="(item, index) of goodListData"
+      v-for="(item, index) of sortGoodsData"
       :key="index"
       ref="goodsItem"
     >
@@ -65,6 +65,14 @@ export default {
     isScroll: {
       type: Boolean,
       default: true
+    },
+    // 当前商品列表的排序方式id，默认为1默认方式（需要从筛选组件内传递）
+    // 1：默认；1-2：价格由高到低；1-3：销量由高到低
+    // 2：有货优先
+    // 3：直营优先
+    sort: {
+      type: String,
+      default: '1'
     }
   },
   data() {
@@ -84,7 +92,9 @@ export default {
       // 当前的父容器布局类型
       layoutClass: 'goods-list',
       // 当前的每个item的样式类型
-      layoutItemClass: 'goods-list-item'
+      layoutItemClass: 'goods-list-item',
+      // 当前已排序好的数据源
+      sortGoodsData: []
     }
   },
   created() {
@@ -93,6 +103,10 @@ export default {
   watch: {
     layout() {
       this.initLayoutType();
+    },
+    sort() {
+      console.log(this.sort);
+      this.setSortGoodsData();
     }
   },
   methods: {
@@ -105,6 +119,9 @@ export default {
         .then((data) => {
           console.log('商品列表data:', data);
           this.goodListData = data.list;
+          // 排序数据
+          this.setSortGoodsData();
+          // 初始化布局
           this.initLayoutType();
         });
     },
@@ -208,6 +225,149 @@ export default {
         // 4.计算左右两侧的最高高度作为容器高度
         this.listHeightTotal = (leftTopTotal > rightTopTotal ? leftTopTotal : rightTopTotal) + 'px';
       }
+    },
+    /**
+     * 对数据源进行排序
+     */
+    setSortGoodsData() {
+      /**
+       * 1：默认；1-2：价格由高到低；1-3：销量由高到低
+       * 2：有货优先
+       * 3：直营优先
+       */
+      switch (this.sort) {
+        case '1':
+          // 默认排序方式，直接拷贝进已排序数据源内即可
+          this.sortGoodsData = this.goodListData.slice(0);
+          break;
+        // 价格由高到低，则对比排序数据源内的price的值
+        case '1-2':
+          this.sortGoodsDataFromKey('price');
+          break;
+        // 销量由高到低，则对比数据源的volume
+        case '1-3':
+          this.sortGoodsDataFromKey('volume');
+          break;
+        case '2':
+          this.sortGoodsDataFromKey('isHave');
+          break;
+        case '3':
+          this.sortGoodsDataFromKey('isDirect');
+          break;
+      }
+    },
+    /**
+     * 对商品数据源需要被排序对应的key的值进行排序
+     */
+    sortGoodsDataFromKey(key) {
+      /**
+       * sort()可选的接收一个方法会回调两个参数；eg: sort((a, b) => {});
+       * a跟b就是当前正在对比的两个数值
+       * 当该方法返回一个<0的负数值，则a会排在b的前面
+       * 当该方法返回一个>0的正数值，则b会排在a的前面
+       * 当该方法返回一个0时，则a跟b的排序保持不变
+       */
+      key === 'isDirect' && this._sortIsDirect();
+      key === 'isHave' && this._sortIsHave();
+      key === 'price' && this._sortPrice();
+      key === 'volume' && this._sortVolume();
+    },
+    /**
+     * 对直营进行排序（是直营并且有货的优先在前）
+     */
+    _sortIsDirect() {
+      // 第一次先排序好直营的数据
+      this.sortGoodsData.sort((a, b) => {
+        let [v1, v2] = [a['isDirect'], b['isDirect']];
+        // 如果v1为true
+        if (v1) {
+          // 返回负值，让v1置于前面
+          return -1;
+          // v2为true
+        } else if (v2) {
+          // 则返回正值，让v2排在前面
+          return 1;
+        } else {
+          // 0保持排序不变
+          return 0;
+        }
+      }).sort((a1, b1) => { // 第二次排序直营并且有货的往前排
+        let [v1, v2] = [a1['isHave'], b1['isHave']];
+        let [v3, v4] = [a1['isDirect'], b1['isDirect']];
+        // v1是直营并且还是有货的
+        if (v1 && v3) {
+          // v1向前
+          return -1;
+          // v2是直营和有货
+        } else if (v2 && v4) {
+          // 则v2向前
+          return 1;
+        } else {
+          // 否则保持不变，维持上一次的排序
+          return 0;
+        }
+      });
+    },
+    /**
+     * 对是否有货排序（有货并且为直营的优先在前）
+     */
+    _sortIsHave() {
+      this.sortGoodsData.sort((a, b) => {
+        // 首先排序好有货
+        let [v1, v2] = [a['isHave'], b['isHave']];
+        if (v1) {
+          // 负值，v1在前
+          return -1;
+        } else if (v2) {
+          return 1;
+        } else {
+          return 0;
+        }
+      }).sort((a1, b1) => { // 再排序直营的，优先在前
+        let [v1, v2] = [a1['isHave'], b1['isHave']];
+        let [v3, v4] = [a1['isDirect'], b1['isDirect']];
+        // v1是有货并且还是直营的话
+        if (v1 && v3) {
+          // v1往前排
+          return -1;
+          // v2有货并直营的话
+        } else if (v2 && v4) {
+          // v2往前排
+          return 1;
+        } else {
+          // 否则则保持不动，依照上一次的排序顺序
+          return 0;
+        }
+      });
+    },
+    /**
+     * 排序价格（从低到高）
+     */
+    _sortPrice() {
+      // 判断float类型(价格)，根据按价格从低到高这个排序方式
+      // 当前应该是v1大于或等于v2的话，应该将v1置于后面
+      // 让价格比较低的置于前面
+      // 如果是价格从高到低的话则返过来
+      this.sortGoodsData.sort((a, b) => {
+        let [v1, v2] = [a['price'], b['price']];
+        if (parseFloat(v1) >= parseFloat(v2)) {
+          return 1;
+        } else {
+          return -1;
+        }
+      });
+    },
+    /**
+     * 排序销量（从高到低）
+     */
+    _sortVolume() {
+      this.sortGoodsData.sort((a, b) => {
+        let [v1, v2] = [a['volume'], b['volume']];
+        if (parseFloat(v1) >= parseFloat(v2)) {
+          return -1;
+        }
+        return 1;
+      });
     }
   }
 }

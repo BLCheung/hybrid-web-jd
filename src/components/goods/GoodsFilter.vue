@@ -69,11 +69,11 @@ export default {
             },
             {
               id: '1-2',
-              name: '价格从高到低'
+              name: '价格从低到高'
             },
             {
               id: '1-3',
-              name: '价格从低到高'
+              name: '销量从高到低'
             }
           ]
         },
@@ -96,6 +96,15 @@ export default {
   },
   created() {
     this.initFilter();
+  },
+  watch: {
+    /**
+     * 监听当前选项的改变
+     */
+    currentFilter(newVal) {
+      // 把当前筛选选项的筛选id传递出去
+      this.$emit('change', newVal.id);
+    }
   },
   methods: {
 		/**

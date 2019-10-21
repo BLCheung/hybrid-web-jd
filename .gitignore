@@ -1,7 +1,6 @@
 .DS_Store
 node_modules
 /dist
-src/assets/js/axios.config.js
 
 # local env files
 .env.local
@@ -20,4 +19,4 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
-
+src/assets/js/axios.config.js

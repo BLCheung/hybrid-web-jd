@@ -7,9 +7,9 @@
     </navigation>
     <div class="goodlist-content z-index-2">
       <!-- 价格筛选 -->
-      <filter-option></filter-option>
+      <filter-option @change="onFilterChange" />
       <!-- 商品列表 -->
-      <goods :layout="currentLayoutType.type" />
+      <goods :layout="currentLayoutType.type" :sort="currentSortType" />
     </div>
   </div>
 </template>
@@ -44,7 +44,10 @@ export default {
           icon: require('@img/waterfall-type.svg')
         }
       ],
-      currentLayoutType: {}
+      // 当前的布局视图方式
+      currentLayoutType: {},
+      // 当前的筛选排序方式
+      currentSortType: '1'
     }
   },
   created() {
@@ -71,6 +74,12 @@ export default {
         this.currentLayoutType = this.layoutTypeDatas[0];
       }
       console.log(this.currentLayoutType);
+    },
+    /**
+     * 监听筛选组件的筛选方式变化
+     */
+    onFilterChange(sort) {
+      this.currentSortType = sort;
     }
   }
 }
