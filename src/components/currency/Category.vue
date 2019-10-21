@@ -1,6 +1,6 @@
 <template>
   <div class="category">
-    <div class="category-item" v-for="item of categories" :key="item.id">
+    <div class="category-item" v-for="item of categories" :key="item.id" @click="onItemClick(item)">
       <img class="category-item-img" :src="item.icon" />
       <p class="category-item-title">{{item.title}}</p>
     </div>
@@ -63,6 +63,13 @@ export default {
           title: '全部'
         }
       ]
+    }
+  },
+  methods: {
+    onItemClick(item) {
+      this.$router.push({
+        name: 'goodList'
+      });
     }
   }
 }

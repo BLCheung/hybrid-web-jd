@@ -5,9 +5,37 @@
 // 文本最多两行展示
 .text-line-2 {
     display: -webkit-box;
-    text-overflow: clip;
+    // text-overflow: clip;
     word-break: break-all;
     white-space: normal;
     overflow: hidden;
     -webkit-box-orient: vertical;
+}
+
+.z-index-2 {
+    z-index: 2;
+}
+
+// z轴最大值
+.z-index-max {
+    z-index: 9999;
+}
+
+// 三角形箭头
+.arrow {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-top: px2rem(8) solid $mainColor;
+    border-left: px2rem(6) solid transparent;
+    border-right: px2rem(6) solid transparent;
+}
+
+.arrow-closed {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-bottom: px2rem(8) solid $mainColor;
+    border-left: px2rem(6) solid transparent;
+    border-right: px2rem(6) solid transparent;
 }

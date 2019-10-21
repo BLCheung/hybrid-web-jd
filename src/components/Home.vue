@@ -1,8 +1,23 @@
 <template>
-  <div class="home">
+  <div class="home" @scroll="onScrollChange">
+    <navigation :isBack="false" :navStyle="navBarStyle">
+      <template v-slot:left>
+        <img :src="navBarCurrentSlotStyle.leftIcon" alt />
+      </template>
+      <template v-slot:center>
+        <search
+          :icon="navBarCurrentSlotStyle.search.icon"
+          :background="navBarCurrentSlotStyle.search.background"
+          :hint="navBarCurrentSlotStyle.search.hint"
+        />
+      </template>
+      <template v-slot:right>
+        <img :src="navBarCurrentSlotStyle.rightIcon" alt />
+      </template>
+    </navigation>
     <div class="home-content">
       <!-- 轮播图 -->
-      <div class="home-content-swiper">
+      <div class="home-content-swiper" ref="swiper">
         <swiper :height="swiperHeight" :datas="swiperData.map(item => {return item.icon})" />
       </div>
       <!-- 520活动 -->
@@ -21,25 +36,29 @@
           <img src="@img/pinGouJie.gif" alt />
         </div>
       </activity>
-      <good-list />
+      <goods :layout="3" :isScroll="false" />
     </div>
   </div>
 </template>
 
 <script>
-import swiper from '@cpm/currency/Swiper.vue';
-import activity from '@cpm/currency/Activity.vue';
-import category from '@cpm/currency/Category.vue';
-import flashSale from '@cpm/seconds/FlashSale.vue';
-import goodList from '@cpm/goods/GoodList.vue';
+import Navigation from '@cpm/currency/NavigationBar.vue'
+import Search from '@cpm/currency/Search.vue';
+import Swiper from '@cpm/currency/Swiper.vue';
+import Activity from '@cpm/currency/Activity.vue';
+import Category from '@cpm/currency/Category.vue';
+import FlashSale from '@cpm/seconds/FlashSale.vue';
+import Goods from '@cpm/goods/Goods.vue';
 
 export default {
   components: {
-    swiper,
-    activity,
-    category,
-    flashSale,
-    goodList
+    Navigation,
+    Search,
+    Swiper,
+    Activity,
+    Category,
+    FlashSale,
+    Goods
   },
   data() {
     return {
@@ -50,11 +69,46 @@ export default {
       // 520活动宣传图图片
       activityData: [],
       // 秒杀数据源
-      secondData: []
+      secondData: [],
+      // 导航栏特有样式
+      navBarStyle: {
+        position: 'fixed',
+        backgroundColor: ''
+      },
+      // 导航栏插槽样式，包含未开始滑动时样式（默认）和滑动到指定锚点样式（高亮）
+      navBarSlotStyle: {
+        // 默认
+        normal: {
+          // 左侧
+          leftIcon: require('@img/more-white.svg'),
+          search: {
+            icon: require('@img/search.svg'),
+            hint: '#999999',
+            background: '#ffffff'
+          },
+          rightIcon: require('@img/message-white.svg')
+        },
+        // 高亮
+        highlight: {
+          // 左侧
+          leftIcon: require('@img/more.svg'),
+          search: {
+            icon: require('@img/search-white.svg'),
+            hint: '#ffffff',
+            background: '#d7d7d7'
+          },
+          rightIcon: require('@img/message.svg')
+        }
+      },
+      // 导航栏插槽当前样式
+      navBarCurrentSlotStyle: {},
+      // 锚点值
+      ANCHOR_SCROLL_TOP: 0
     };
   },
   created() {
     this.initHomeData();
+    this.navBarCurrentSlotStyle = this.navBarSlotStyle.normal;
   },
   methods: {
     /**
@@ -74,7 +128,33 @@ export default {
           this.activityData = activityData.list;
           console.log('首页秒杀data:', secondData);
           this.secondData = secondData.list;
+          // 待dom渲染完数据后执行的回调
+          this.$nextTick(() => {
+            this.getNavAnchor();
+          });
         }));
+    },
+    /**
+     * 获取锚点值
+     */
+    getNavAnchor() {
+      this.ANCHOR_SCROLL_TOP = this.$refs.swiper.getBoundingClientRect().height;
+      console.log('锚点值:', this.ANCHOR_SCROLL_TOP);
+    },
+    /**
+     * 界面滑动监听事件
+     */
+    onScrollChange({ target }) {
+      // 计算导航栏的opacity值
+      let opacity = target.scrollTop / this.ANCHOR_SCROLL_TOP;
+      // 指定导航栏插槽样式
+      if (opacity >= 1) {
+        this.navBarCurrentSlotStyle = this.navBarSlotStyle.highlight;
+      } else {
+        this.navBarCurrentSlotStyle = this.navBarSlotStyle.normal;
+      }
+      // 根据opacity透明比例来设置导航栏的实时背景样式
+      this.navBarStyle.backgroundColor = `rgba(255, 255, 255, ${opacity})`;
     }
   }
 };
@@ -83,19 +163,17 @@ export default {
 <style lang="scss" scoped>
 @import '@css/style.scss';
 .home {
-  display: flex;
-  flex-direction: column;
   width: 100%;
   height: 100%;
   overflow: hidden;
+  // 当容器内内容超过容器固定高度，则y轴上自动可滚动
   overflow-y: auto;
 
   &-content {
-    height: 100%;
+    // height: 100%;
 
     &-swiper {
       width: 100%;
-      
     }
 
     .activity-520 {

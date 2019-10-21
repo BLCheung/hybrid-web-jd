@@ -7,11 +7,15 @@ Vue.use(Router)
 export default new Router({
   mode: 'history',
   base: process.env.BASE_URL,
-  routes: [
-    {
+  routes: [{
       path: '/',
       name: 'main',
       component: Main
+    },
+    {
+      path: '/goodList',
+      name: 'goodList',
+      component: () => import('@cpm/goods/GoodsList.vue') // 异步组件：只有在需要的时候才导入该组件
     }
     // {
     //   path: '/about',
