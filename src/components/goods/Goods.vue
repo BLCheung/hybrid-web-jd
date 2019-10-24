@@ -23,6 +23,7 @@
       :style="itemStyles[index]"
       v-for="(item, index) of sortGoodsData"
       :key="index"
+      @click="onItemClick(item)"
       ref="goodsItem"
     >
       <img class="goods-item-img" :style="imgStyles[index]" :src="item.img" alt />
@@ -34,11 +35,11 @@
           <!-- 是否为直营 -->
           <direct v-if="item.isDirect" />
           <!-- 是否缺货 -->
-          <no-have v-if="!item.isHave"></no-have>
+          <no-have v-if="!item.isHave" />
           {{item.name}}
         </p>
         <div class="goods-item-desc-data">
-          <p class="goods-item-desc-data-price">￥: {{item.price}}</p>
+          <p class="goods-item-desc-data-price">￥: {{item.price | price2Fixed}}</p>
           <p class="goods-item-desc-data-sales">销量: {{item.volume}}件</p>
         </div>
       </div>
@@ -227,6 +228,21 @@ export default {
       }
     },
     /**
+     * 商品点击事件
+     */
+    onItemClick(item) {
+      if (!item.isHave) {
+        alert('该商品已售罄');
+      } else {
+        this.$router.push({
+          name: 'goodsDetail',
+          params: {
+            goods: item
+          }
+        });
+      }
+    },
+    /**
      * 对数据源进行排序
      */
     setSortGoodsData() {
@@ -381,7 +397,6 @@ $itemGridRootMargin: px2rem(2);
 $itemDescTitleSize: 15;
 
 .goods {
-  box-sizing: border-box;
   background-color: $bgColor;
 
   &-scroll {

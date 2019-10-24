@@ -28,9 +28,13 @@ export default {
       type: Array,
       // 设置该属性为必须要传的值
       required: true,
-      default: function() {
+      default() {
         return [];
       }
+    },
+    paginationType: {
+      type: Number,
+      default: 1
     }
   },
   components: {
@@ -45,14 +49,35 @@ export default {
         // swiper高度跟随slide高度变化
         autoHeight: true,
         // 分页器样式
-        pagination: {
-          // 分页器样式
-          el: '.swiper-pagination',
-          type: 'bullets',
-          bulletClass: 'my-bullet'
-        }
+        pagination: {}
       }
     };
+  },
+  created() {
+    this.initPaginationType();
+  },
+  methods: {
+    initPaginationType() {
+      switch (this.paginationType) {
+        case 1:
+          this.swiperOptions.pagination = {
+            // 分页器样式（轮播的底部小圆点）
+            el: '.swiper-pagination',
+            type: 'bullets',
+            bulletClass: 'my-bullet'
+          }
+          break;
+
+        case 2:
+          this.swiperOptions.pagination = {
+            el: '.swiper-pagination',
+            type: 'fraction'
+          }
+          break;
+        default:
+          break;
+      }
+    }
   }
 };
 </script>
@@ -76,6 +101,20 @@ export default {
   .swiper-pagination-bullet-active {
     background-color: #ffffff;
   }
+}
+
+// 轮播分页器类型为fraction时的样式
+.swiper-pagination-fraction {
+  width: fit-content;
+  height: auto;
+  left: auto;
+  right: 0;
+  font-size: $infoFontSize;
+  color: white;
+  padding: px2rem(6) px2rem(18);
+  box-sizing: border-box;
+  border-radius: px2rem(16) 0 0 px2rem(16);
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 .swiper-slide-img {

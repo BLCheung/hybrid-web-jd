@@ -13,9 +13,14 @@ export default new Router({
       component: Main
     },
     {
-      path: '/goodList',
-      name: 'goodList',
-      component: () => import('@cpm/goods/GoodsList.vue') // 异步组件：只有在需要的时候才导入该组件
+      path: '/goodsList',
+      name: 'goodsList',
+      component: () => import('./views/GoodsList.vue') // 异步组件：只有在需要的时候才导入该组件
+    },
+    {
+      path: '/goodsDetail',
+      name: 'goodsDetail',
+      component: () => import('./views/GoodsDetail.vue')
     }
     // {
     //   path: '/about',

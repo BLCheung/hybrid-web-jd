@@ -25,6 +25,7 @@ export default {
     FilterOption,
     Goods
   },
+  props: {},
   data() {
     return {
       layoutTypeDatas: [
@@ -89,6 +90,8 @@ export default {
 @import '@css/style.scss';
 
 .goodlist {
+  display: flex;
+  flex-direction: column;
   position: absolute;
   width: 100%;
   height: 100%;

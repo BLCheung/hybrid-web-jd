@@ -18,13 +18,13 @@ export default {
   line-height: px2rem(15);
   color: white;
   width: fit-content;
-	display: inline-flex;
-	vertical-align: top;
-	align-items: center;
-	justify-content: center;
+  display: inline-flex;
+  vertical-align: top;
+  align-items: center;
+  justify-content: center;
   border-radius: px2rem(4);
-	padding: 0 px2rem(2);
-	margin: 0 px2rem(1);
+  padding: px2rem(2) px2rem(4);
+  margin: 0 px2rem(1);
   background-color: $hintColor;
 }
 </style>

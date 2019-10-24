@@ -12,6 +12,13 @@
     -webkit-box-orient: vertical;
 }
 
+.text-line-1 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+}
+
 .z-index-2 {
     z-index: 2;
 }

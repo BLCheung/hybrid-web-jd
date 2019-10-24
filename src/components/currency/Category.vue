@@ -68,7 +68,7 @@ export default {
   methods: {
     onItemClick(item) {
       this.$router.push({
-        name: 'goodList'
+        name: 'goodsList'
       });
     }
   }

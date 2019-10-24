@@ -1,6 +1,6 @@
 <template>
   <div id="main">
-    <!-- 动态组件，用法类似小程序的template -->
+    <!-- 动态切换组件 -->
     <component :is="currentComponent"></component>
     <!-- 底部tab栏 -->
     <tool-bar @onChange="onChangeFragment" />
