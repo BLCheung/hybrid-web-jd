@@ -3,50 +3,65 @@
     <!-- 导航栏 -->
     <navigation :isBack="false" @left="onNaviLeftClick" :navStyle="navBarStyle">
       <template v-slot:left>
-        <div class="detail-nav-left">
+        <div class="detail-nav-left" :style="navBarLeftStyle">
           <img src="@img/back-white.svg" alt />
         </div>
       </template>
       <template v-slot:center>
-        <span class="detail-nav-title">商品详情</span>
+        <span class="detail-nav-title" :style="{opacity: navBarOpacity}">商品详情</span>
       </template>
     </navigation>
-    <!-- 轮播 -->
-    <swiper :height="SWIPER_IMG_HEIGHT + 'rem'" :datas="goodsData.detailImgs" :paginationType="2" />
-    <!-- 详情 -->
-    <div class="detail-content">
-      <!-- 标题价格 -->
-      <div class="detail-content-desc">
-        <p class="detail-content-desc-price">￥{{goodsData.price | price2Fixed}}</p>
-        <p class="detail-content-desc-title">
-          <direct v-if="goodsData.isDirect" />
-          {{goodsData.name}}
-        </p>
-      </div>
-      <div class="detail-content-item">
-        <p class="detail-content-item-selected">
-          已选
-          <span class="text-line-1">{{goodsData.name}}</span>
-        </p>
-        <!-- 附加服务 -->
-        <ul class="detail-content-item-support">
-          <li
-            class="detail-content-item-support-item"
-            v-for="(item, index) of supportsData"
-            :key="index"
-          >
-            <img src="@img/support.svg" alt />
-            <span>{{item}}</span>
-          </li>
-        </ul>
-      </div>
-      <!-- 图片描述 -->
-      <div class="detail-content-gallery">
-        <img v-for="(item, index) of goodsData.detailImgs" :key="index" :src="item" alt />
-      </div>
-    </div>
+
+    <!-- 视差区域 -->
+    <parallax :scrollTop="this.scrollTop">
+      <!-- 缓慢区 -->
+      <template v-slot:slow>
+        <!-- 轮播 -->
+        <swiper
+          :height="SWIPER_IMG_HEIGHT + 'rem'"
+          :datas="goodsData.detailImgs"
+          :paginationType="2"
+        />
+      </template>
+      <!-- 正常区 -->
+      <template>
+        <!-- 详情 -->
+        <div class="detail-content">
+          <!-- 标题价格 -->
+          <div class="detail-content-desc">
+            <p class="detail-content-desc-price">￥{{goodsData.price | price2Fixed}}</p>
+            <p class="detail-content-desc-title">
+              <direct v-if="goodsData.isDirect" />
+              {{goodsData.name}}
+            </p>
+          </div>
+          <div class="detail-content-item">
+            <p class="detail-content-item-selected">
+              已选
+              <span class="text-line-1">{{goodsData.name}}</span>
+            </p>
+            <!-- 附加服务 -->
+            <ul class="detail-content-item-support">
+              <li
+                class="detail-content-item-support-item"
+                v-for="(item, index) of supportsData"
+                :key="index"
+              >
+                <img src="@img/support.svg" alt />
+                <span>{{item}}</span>
+              </li>
+            </ul>
+          </div>
+          <!-- 图片描述 -->
+          <div class="detail-content-gallery">
+            <img v-for="(item, index) of goodsData.detailImgs" :key="index" :src="item" alt />
+          </div>
+        </div>
+      </template>
+    </parallax>
+
     <!-- 购物车&购买 -->
-    <div class="detail-btn">
+    <div class="detail-btn z-index-max">
       <div class="detail-btn-add">加入购物车</div>
       <div class="detail-btn-buy">购买</div>
     </div>
@@ -57,12 +72,14 @@
 import Navigation from '@cpm/currency/NavigationBar.vue';
 import Swiper from '@cpm/currency/Swiper.vue';
 import Direct from '@cpm/goods/Direct.vue';
+import Parallax from '@cpm/currency/Parallax.vue';
 
 export default {
   components: {
     Navigation,
     Swiper,
-    Direct
+    Direct,
+    Parallax
   },
   data() {
     return {
@@ -84,15 +101,45 @@ export default {
     this.getGoodsData();
   },
   computed: {
+    /**
+     * 导航栏左插槽Opacity变化
+     * 当前呈递减状态，scroll / ANCHOR_SCROLL_TOP初始会得到很小的小数值
+     * 1 - 很小的小数值值会得到比较大的值，1会不断减去从0往1不断变大的小数值最终会变成1 - 1 = 0；
+     * 所以当前为1 - 0 ~ 1不断变大的值 = 值会从1 ~ 0区间递减的值
+     * Opacity为逐渐从1 ~ 0隐藏
+     */
+    navBarLeftOpacity() {
+      return 1 - this.scrollTop / this.ANCHOR_SCROLL_TOP;
+    },
+    /**
+     * 导航栏左侧插槽样式
+     * 默认值为rgba(0, 0, 0, 0.6)
+     * 呈递减
+     */
+    navBarLeftStyle() {
+      return {
+        backgroundColor: `rgba(0, 0, 0, ${this.navBarLeftOpacity - 0.4})`
+      }
+    },
+    /**
+     * 导航栏样式
+     */
     navBarStyle() {
       return {
-        backgroundColor: '',
-        position: 'fixed'
+        backgroundColor: `rgba(216, 30, 6, ${this.navBarOpacity})`,
+        position: 'fixed',
+        top: 0
       }
+    },
+    /**
+     * 整个导航栏Opacity变化
+     * 当前呈递增状态，1减去一个不断的从1开始递减的值，最终值会为1
+     * 1 - 1 ~ 0不断变小的值 = 值会从0 ~ 1区间递增的值
+     * Opacity为逐渐从0 ~ 1完全显示
+     */
+    navBarOpacity() {
+      return 1 - this.navBarLeftOpacity;
     }
-    // navBarSlotStyle() {
-    //   return;
-    // }
   },
   methods: {
     /**
@@ -109,11 +156,10 @@ export default {
       this.$router.go(-1);
     },
     /**
-     * 
+     * 界面滚动监听
      */
     onScrollChange({ target }) {
       this.scrollTop = target.scrollTop;
-      console.log(this.scrollTop);
     }
   }
 }
@@ -137,7 +183,6 @@ $rootBtnHeight: px2rem(46);
     width: fit-content;
     height: fit-content;
     border-radius: 50%;
-    background-color: rgba(0, 0, 0, 0.6);
   }
 
   &-nav-title {
@@ -150,8 +195,9 @@ $rootBtnHeight: px2rem(46);
     display: flex;
     flex-direction: column;
     width: 100%;
-    overflow: hidden;
     margin-bottom: $rootBtnHeight;
+    // 加个背景遮住，否则滑动视差效果时背景会显示轮播图片在后面
+    background-color: white;
 
     &-desc {
       display: flex;
@@ -203,7 +249,7 @@ $rootBtnHeight: px2rem(46);
           font-size: $infoFontSize;
           font-weight: bold;
           color: #333333;
-          margin-left: px2rem(2);
+          margin-left: px2rem(4);
         }
       }
 
