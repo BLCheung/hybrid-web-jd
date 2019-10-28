@@ -1,5 +1,5 @@
 <template>
-  <div class="home" @scroll="onScrollChange">
+  <div class="home" @scroll="onScrollChange" ref="home">
     <navigation :isBack="false" :navStyle="navBarStyle">
       <template v-slot:left>
         <img :src="navBarCurrentSlotStyle.leftIcon" alt />
@@ -100,6 +100,8 @@ export default {
           rightIcon: require('@img/message.svg')
         }
       },
+      // 当前页面滚动距离
+      scrollTop: 0,
       // 导航栏插槽当前样式
       navBarCurrentSlotStyle: {},
       // 锚点值
@@ -109,6 +111,12 @@ export default {
   created() {
     this.initHomeData();
     this.navBarCurrentSlotStyle = this.navBarSlotStyle.normal;
+  },
+  /**
+   * 当<keep-alive>被激活时,则会触发当前activated方法
+   */
+  activated() {
+    this.$refs.home.scrollTop = this.scrollTop;
   },
   methods: {
     /**
@@ -145,8 +153,9 @@ export default {
      * 界面滑动监听事件
      */
     onScrollChange({ target }) {
+      this.scrollTop = target.scrollTop;
       // 计算导航栏的opacity值
-      let opacity = target.scrollTop / this.ANCHOR_SCROLL_TOP;
+      let opacity = this.scrollTop / this.ANCHOR_SCROLL_TOP;
       // 指定导航栏插槽样式
       if (opacity >= 1) {
         this.navBarCurrentSlotStyle = this.navBarSlotStyle.highlight;
@@ -170,7 +179,7 @@ export default {
   overflow-y: auto;
 
   &-content {
-    // height: 100%;
+    height: 100%;
 
     &-swiper {
       width: 100%;

@@ -20,6 +20,7 @@ import FilterOption from '@cpm/goods/GoodsFilter.vue';
 import Goods from '@cpm/goods/Goods.vue';
 
 export default {
+  name: 'goodsList',
   components: {
     Navigation,
     FilterOption,

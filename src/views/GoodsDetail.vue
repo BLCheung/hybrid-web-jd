@@ -1,5 +1,5 @@
 <template>
-  <div class="detail" @scroll="onScrollChange">
+  <div class="detail" @scroll="onScrollChange" ref="detail">
     <!-- 导航栏 -->
     <navigation :isBack="false" @left="onNaviLeftClick" :navStyle="navBarStyle">
       <template v-slot:left>
@@ -75,6 +75,7 @@ import Direct from '@cpm/goods/Direct.vue';
 import Parallax from '@cpm/currency/Parallax.vue';
 
 export default {
+  name: 'goodsDetail',
   components: {
     Navigation,
     Swiper,
@@ -99,6 +100,9 @@ export default {
   },
   created() {
     this.getGoodsData();
+  },
+  activated() {
+    this.$refs.detail.scrollTop = this.scrollTop;
   },
   computed: {
     /**
@@ -146,8 +150,16 @@ export default {
      * 获取从上一页传递过来的商品数据
      */
     getGoodsData() {
-      this.goodsData = this.$route.params.goods;
-      console.log('商品:', this.goodsData);
+      this.$http
+        .get('/goodsDetail', {
+          params: {
+            goodsId: this.$route.query.id
+          }
+        })
+        .then(({ goodsData }) => {
+          console.log('商品data:', goodsData);
+          this.goodsData = goodsData;
+        });
     },
     /**
      * 导航栏点击返回

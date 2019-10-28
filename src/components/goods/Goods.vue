@@ -16,6 +16,8 @@
     class="goods"
     :class="[layoutClass, {'goods-scroll': isScroll}]"
     :style="{height: listHeightTotal}"
+    ref="goods"
+    @scroll="onScrollChange"
   >
     <div
       class="goods-item"
@@ -78,6 +80,8 @@ export default {
   },
   data() {
     return {
+      // 当前页面滑动距离
+      scrollTop: 0,
       // 商品列表数据
       goodListData: [],
       // 图片最大可接受高度
@@ -100,6 +104,14 @@ export default {
   },
   created() {
     this.initData();
+  },
+  /**
+   * 当组件在 <keep-alive> 内被切换，
+   * 它的 activated 和 deactivated 这两个生命周期钩子函数将会被对应执行。
+   */
+  activated() {
+    // 切换时保存滑动距离
+    this.$refs.goods.scrollTop = this.scrollTop;
   },
   watch: {
     layout() {
@@ -237,10 +249,23 @@ export default {
         this.$router.push({
           name: 'goodsDetail',
           params: {
-            goods: item
+            routerType: 'push'
+          },
+          query: {
+            // 通过query的形式把参数嵌套进url里面,
+            // 因为路由到目标界面的时候,如果在目标界面刷新界面会把目标界面的路由重置
+            // 导致目标界面会拿不到路由内部的params的参数的数据,会报undefined
+            // 但是url不会被重置,所以把目标界面必须的参数用query的形式传递
+            id: item.id
           }
         });
       }
+    },
+    /**
+     * 滑动监听
+     */
+    onScrollChange({ target }) {
+      this.scrollTop = target.scrollTop;
     },
     /**
      * 对数据源进行排序

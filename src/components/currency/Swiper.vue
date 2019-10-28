@@ -22,7 +22,7 @@ export default {
       // 该属性的类型
       type: String,
       // 默认值
-      default: 'auto'
+      default: '184px'
     },
     datas: {
       type: Array,
@@ -119,5 +119,6 @@ export default {
 
 .swiper-slide-img {
   width: 100%;
+  background-color: $lineColor;
 }
 </style>
