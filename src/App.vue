@@ -17,6 +17,25 @@ export default {
       taskStacks: ['main']
     }
   },
+  created() {
+    // 判断当前设备是否为iPhoneX设备
+    this.$store.commit('setIsIphoneX', window.isIphoneX);
+    // 给window对象指定原生端调用的方法
+    window.nativeSetUserName = this.onNativeAutoLogin;
+    // 获取Android顶部状态栏高度
+    if (window.android) {
+      this.$store.commit('getStatusBarHeight', window.android.getStatusBarHeight());
+    }
+  },
+  methods: {
+    /**
+     * 保存自动登录用户名给Vuex状态管理器
+     * 提供给原生端调用的方法，把userName传进
+     */
+    onNativeAutoLogin(userName) {
+      this.$store.commit('setUserName', userName);
+    }
+  },
   watch: {
     /**
      * 监听vue原型链上的route路由对象
@@ -35,6 +54,11 @@ export default {
         this.taskStacks.pop();
         // 后退界面
         this.transitionName = 'trans-right';
+      }
+
+      // 重置任务栈
+      if (to.params.clearTask) {
+        this.taskStacks = ['main'];
       }
     }
   }

@@ -10,7 +10,6 @@
 </template>
 
 <script>
-// @ is an alias to /src
 import Toolbar from '@cpm/currency/Toolbar.vue';
 export default {
   name: 'main',

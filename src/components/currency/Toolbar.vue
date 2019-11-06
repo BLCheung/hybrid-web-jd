@@ -2,6 +2,7 @@
   <div class="toolBar">
     <div
       class="toolBar-item"
+      :class="{'iphonex-bottom': $store.state.isIphoneX}"
       v-for="(item, index) of toolBarData"
       :key="index"
       @click="onChangeFragment(item, index)"
@@ -54,7 +55,14 @@ export default {
       selectedTabIndex: 0
     };
   },
+  activated() {
+    // 当keep-alive被激活时触发该方法，
+
+  },
   methods: {
+    /**
+     * tab页面被改变监听
+     */
     onChangeFragment(item, index) {
       // 改变当前tab下标
       this.selectedTabIndex = index;

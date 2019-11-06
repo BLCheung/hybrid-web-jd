@@ -63,7 +63,7 @@ export default {
   data() {
     return {
       // 轮播高度
-      swiperHeight: '184px',
+      swiperHeight: this.$store.state.isIphoneX ? '228px' : '184px',
       // 轮播图片数据源
       swiperData: [],
       // 520活动宣传图图片
@@ -84,7 +84,8 @@ export default {
           search: {
             icon: require('@img/search.svg'),
             hint: '#999999',
-            background: '#ffffff'
+            background: 'rgba(255, 255, 255, 0.8)'
+            // background: '#ffffff'
           },
           rightIcon: require('@img/message-white.svg')
         },

@@ -8,6 +8,8 @@
     // text-overflow: clip;
     word-break: break-all;
     white-space: normal;
+    line-clamp: 2;
+    -webkit-line-clamp: 2;
     overflow: hidden;
     -webkit-box-orient: vertical;
 }
@@ -45,4 +47,45 @@
     border-bottom: px2rem(8) solid $mainColor;
     border-left: px2rem(6) solid transparent;
     border-right: px2rem(6) solid transparent;
+}
+
+.btn-commit {
+    display: block;
+    width: 90%;
+    height: px2rem(46);
+    font-size: $titleFontSize;
+    line-height: px2rem(46);
+    color: white;
+    text-align: center;
+    margin-left: 5%;
+    background-color: $mainColor;
+    border-radius: px2rem(50);    
+}
+
+.input-wrapper {
+    height: px2rem(48);
+    padding: $marginSize;
+    margin-top: $marginSize;
+    overflow: hidden;
+    background-color: white;
+    border-bottom: px2rem(1) solid $lineColor;
+    box-sizing: border-box;
+
+    input {
+        width: 100%;
+        height: 100%;
+        font-size: $titleFontSize;
+        outline: none;
+        border: none;
+    }
+}
+
+// iPhoneX顶部危险区
+.iphonex-top {
+    padding-top: 44px;
+}
+
+// iPhoneX底部危险区
+.iphonex-bottom {
+    padding-bottom: 34px;
 }

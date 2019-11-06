@@ -1,5 +1,10 @@
 <template>
-  <div class="navigation-bar z-index-max" :style="navStyle" :class="{'bottom-line': title}">
+  <div
+    class="navigation-bar z-index-max"
+    style="statusBarStyle"
+    :style="[navStyle, statusBarStyle]"
+    :class="[{'iphonex-top': $store.state.isIphoneX}, {'bottom-line': title}]"
+  >
     <!-- 左 -->
     <div class="left" @click="onLeftClick">
       <!-- 默认状态 -->
@@ -41,10 +46,29 @@ export default {
   },
   data() {
     return {
-
+      statusBarStyle: {
+        height: 0,
+        paddingTop: 0
+      }
     }
   },
+  created() {
+    this.setNavBarHeight();
+  },
   methods: {
+    setNavBarHeight() {
+      // 44是iPhone 6，7，8设计稿上的高度
+      // 44 / 375 得到rem的自适应缩放比例 再乘当前设备最大宽度会得到当前设备相对于设计稿上的自适应px像素
+      const height = 44 / 375 * window.innerWidth;
+      // Android原生端状态栏高度
+      const nativeHeight = this.$store.state.statusBarHeight;
+      if (nativeHeight && nativeHeight > height) {
+        this.statusBarStyle.paddingTop = nativeHeight - height + 'px';
+      } else {
+        this.statusBarStyle.paddingTop = 22 / 375 * window.innerWidth + 'px';
+      }
+      this.statusBarStyle.height = height + 'px';
+    },
     onLeftClick() {
       // 触发事件，相当于微信小程序的this.triggerEvent()触发一个事件给父组件去接受
       this.$emit('left');
@@ -63,9 +87,8 @@ $leftAndRightWidth: px2rem(26);
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  height: $navigationRootHeight;
+  // height: $navigationRootHeight;
   width: 100%;
-  box-sizing: border-box;
 
   .left,
   .right {
@@ -95,6 +118,6 @@ $leftAndRightWidth: px2rem(26);
 }
 
 .bottom-line {
-  border-bottom: px2rem(1) solid $lineColor;
+  // border-bottom: px2rem(1) solid $lineColor;
 }
 </style>

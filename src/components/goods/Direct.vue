@@ -19,7 +19,7 @@ export default {
   color: white;
   width: fit-content;
   display: inline-flex;
-  vertical-align: middle;
+  vertical-align: top;
   align-items: center;
   justify-content: center;
   border-radius: px2rem(4);
