@@ -32,7 +32,7 @@
         </li>
       </ul>
       <!-- 底部立即购买按钮 -->
-      <div class="buy-content-btn">立即购买</div>
+      <div class="buy-content-btn" @click="onPayClick">立即购买</div>
     </div>
   </div>
 </template>
@@ -91,6 +91,33 @@ export default {
 		 */
     onPayItemClick(item) {
       this.currentPay = item;
+    },
+    /**
+		 * 支付
+		 */
+    onPayClick() {
+      // 判断支付方式
+      if (this.currentPay.id === '1') {
+        this.aliPay();
+      } else if (this.currentPay.id === '2') {
+        this.wxPay();
+      }
+    },
+    /**
+		 * 支付宝支付
+		 */
+    aliPay() {
+      if (window.android) {
+        window.android.pay(JSON.stringify(this.goodsData));
+      }
+    },
+    /**
+     * 微信支付
+     */
+    wxPay() {
+      if (window.android) {
+        window.android.pay(JSON.stringify(this.goodsData));
+      }
     },
 		/**
 		 * 判断当前的支付check图标选中状态
