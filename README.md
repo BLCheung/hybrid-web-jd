@@ -4,11 +4,7 @@
 
 ## Screenshots
 
-<img src="./screenshots/img1.png" width="25%" hspace="2" />
-<img src="./screenshots/img2.png" width="25%" hspace="2" />
-<img src="./screenshots/img5.png" width="25%" hspace="2" />
-<img src="./screenshots/img3.png" width="25%" hspace="2" />
-<img src="./screenshots/img4.png" width="25%" hspace="2" />
+<img src="./screenshots/img1.png" width="25%" hspace="2" /><img src="./screenshots/img2.png" width="25%" hspace="2" /><img src="./screenshots/img5.png" width="25%" hspace="2" /><img src="./screenshots/img3.png" width="25%" hspace="2" /><img src="./screenshots/img4.png" width="25%" hspace="2" />
 
 ## 项目模块与功能
 
