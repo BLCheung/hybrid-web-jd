@@ -1,6 +1,6 @@
 # hybrid-web-jd
 
-该项目为仿京东混合开发项目的web端，使用Vue开发。目前仅兼容了Android端
+该项目为仿京东混合开发项目的web端，使用Vue开发。目前仅兼容了Android端 [这里](https://github.com/BLCheung/hybrid-android-jd)
 
 ## Screenshots
 
@@ -39,5 +39,6 @@
   - 自动登录验证
 
 ## 体验
+PS：项目线上地址为境外，国内访问可能会很慢，请稍安勿躁
 
-[点我体验！](http://jd.hybrid.blcheung.club/)
+<img src="./screenshots/1573319992.png" />
