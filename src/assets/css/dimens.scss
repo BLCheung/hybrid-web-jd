@@ -1,5 +1,6 @@
 // 定义初始根元素fontSize大小，根据iPhone6,6s,7,8设计稿宽度设置
-$rootFontSize: 375;
+// 除以10 是同步HTML加载完成时事件定义的最大宽度
+$rootFontSize: 375 / 10;
 
 // 定义px -> rem转换函数
 @function px2rem($px) {

@@ -82,7 +82,6 @@ export default {
           }
         })
         .then(({ goodsData }) => {
-          console.log('商品data:', goodsData);
           this.goodsData = goodsData;
         });
     },

@@ -131,11 +131,8 @@ export default {
           this.$http.get('/seconds')
         ])
         .then(this.$http.spread((swiperData, activityData, secondData, goodListData) => {
-          console.log('首页轮播data:', swiperData);
           this.swiperData = swiperData.list;
-          console.log('首页520活动data:', activityData);
           this.activityData = activityData.list;
-          console.log('首页秒杀data:', secondData);
           this.secondData = secondData.list;
           // 待dom渲染完数据后执行的回调
           this.$nextTick(() => {
@@ -148,7 +145,6 @@ export default {
      */
     getNavAnchor() {
       this.ANCHOR_SCROLL_TOP = this.$refs.swiper.getBoundingClientRect().height;
-      console.log('锚点值:', this.ANCHOR_SCROLL_TOP);
     },
     /**
      * 界面滑动监听事件

@@ -133,7 +133,6 @@ export default {
       this.$store.commit('deleteGoods');
       this.cartsData = this.$store.state.carts;
       this.computeGoodsTotal();
-      console.log('购物车数据源:', this.cartsData);
     },
     /**
      * 勾选图标

@@ -30,7 +30,6 @@ export default new Vuex.Store({
         if (item.id === goods.id) {
           // 已包含则对该商品数量+1
           // item.num += 1;
-          console.log('该商品已在购物车');
           vue.$toast({
             title: '该商品已在购物车'
           });
@@ -47,7 +46,6 @@ export default new Vuex.Store({
         // 商品数量
         Vue.set(goods, 'num', 1);
         state.carts.push(goods);
-        console.log('不存在，添加');
         vue.$toast({
           title: '添加成功！'
         });
@@ -61,7 +59,6 @@ export default new Vuex.Store({
       state.carts = state.carts.filter(item => {
         return !item.isCheck;
       });
-      console.log(state.carts);
     },
     /**
      * 改变购物车内商品的数量

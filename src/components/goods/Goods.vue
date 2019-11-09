@@ -118,7 +118,6 @@ export default {
       this.initLayoutType();
     },
     sort() {
-      console.log(this.sort);
       this.setSortGoodsData();
     }
   },
@@ -130,7 +129,6 @@ export default {
       this.$http
         .get('/goods')
         .then((data) => {
-          console.log('商品列表data:', data);
           this.goodListData = data.list;
           // 排序数据
           this.setSortGoodsData();

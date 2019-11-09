@@ -75,7 +75,6 @@ export default {
       } else {
         this.currentLayoutType = this.layoutTypeDatas[0];
       }
-      console.log(this.currentLayoutType);
     },
     /**
      * 监听筛选组件的筛选方式变化

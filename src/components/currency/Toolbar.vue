@@ -82,6 +82,7 @@ export default {
   align-items: center;
   justify-content: space-around;
   width: 100%;
+  height: px2rem(46);
   border-top: 1px solid $lineColor;
   box-sizing: border-box;
   background-color: white;

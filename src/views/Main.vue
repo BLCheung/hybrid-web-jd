@@ -32,7 +32,6 @@ export default {
      * 接收从子组件发送的事件，参数为从子组件传递过来的数据
      */
     onChangeFragment(name) {
-      console.log('toolBar组件name', name);
       this.currentComponent = name;
     }
   }

@@ -88,7 +88,8 @@ export default {
   data() {
     return {
       goodsData: {},
-      SWIPER_IMG_HEIGHT: 364 / 375,
+      // 364是按照i6设计稿得到的大小 乘10是因为根元素fontSize除了10，所以要乘上去，否则结果会很小
+      SWIPER_IMG_HEIGHT: 364 / 375 * 10,
       ANCHOR_SCROLL_TOP: 310,
       scrollTop: 0,
       supportsData: [
@@ -157,7 +158,6 @@ export default {
           }
         })
         .then(({ goodsData }) => {
-          console.log('商品data:', goodsData);
           this.goodsData = goodsData;
         });
     },
